@@ -1,6 +1,6 @@
 ---
 name: northstar-keywords
-description: Inspect Apple App Store keywords with the North Star CLI for country-specific popularity, competition estimates, related reported terms, and weekly or monthly reporting periods. Use for ASO keyword research or checking North Star's Apple Ads connection.
+description: Research App Store keywords and discover competitor keyword candidates with the North Star CLI. Use for country-specific popularity, competition estimates, competitor search-sample verification, or checking North Star's Apple Ads connection.
 ---
 
 # North Star keyword inspector
@@ -40,7 +40,22 @@ Keywords are positional; quote multi-word terms. Weekly/monthly choices select o
 
 Keyword output is a JSON array, one result per keyword in input order. Summary fields are `keyword`, `country`, `store`, `popularity`, `popularityStatus`, optional `popularityMessage`, `period`, optional `relatedTerms`, `competition`, `competitionConfidence`, `topApps` (first five), and optional `searchError`. Full output uses the package's `Inspection` type. `--connection` returns one status/message object and exits 0 only when connected. `--countries` returns a code/name object. Usage failures exit 1 on stderr; per-keyword provider failures are represented in JSON and do not fail the command.
 
-## Interpret evidence
+## Discover competitor keywords
+
+For competitor research (CLI 0.2.0 beta or later):
+
+```sh
+northstar competitors 1342608792 --country US --range month --limit 10 --summary
+northstar competitors 'https://apps.apple.com/us/app/id1342608792' --discover-only --summary
+northstar competitors 1342608792 --keyword 'voice controlled row counter' --limit 1 --summary
+northstar competitors 1342608792 --keywords-file /absolute/path/keywords.txt --limit 20 --summary
+```
+
+Input is an app ID or App Store URL. Use `--country` explicitly; a URL's country does not select the storefront. `--keywords-file` accepts newline-separated terms or a JSON string array, up to 64 KiB/100 supplied terms. Supplied terms come first, count toward `--limit`, and are followed by metadata suggestions. Default 10 candidates, maximum 30. Use `--discover-only` for quick extraction; verification pauses four seconds per keyword and stops after a search failure. Avoid concurrent commands or bulk crawls.
+
+The command returns one JSON object, with source phrases and `kind` (`metadata_phrase`, `metadata_combination`, `provided`). English-oriented extraction and combinations are experimental suggestions, not extracted private keywords. Review their relevance. Do not present the hand-curated benchmark's hit rate as automated extraction accuracy. `evidence.status` distinguishes `observed`, `not_observed`, `search_error`, and `not_checked`; `samplePosition` is a public search sample position, never a native App Store rank. Do not equate absence with being unranked. `--summary` retains evidence, full popularity status/period, and competition; progress is on stderr. Exit 2 includes partial JSON worth preserving; exit 1 is an input/lookup failure. For the detailed contract and limitations read `docs/COMPETITOR_DISCOVERY.md` in the checkout. To inspect the literal keyword competitors, use `northstar -- competitors`.
+
+## Interpret scores
 
 - `available`: Apple's country-wide 1–100 relative popularity index, not search counts. iPhone and iPad share it.
 - `not_reported`: Apple omitted this exact term from the country's eligible top-terms report for the selected period. Popularity is **unknown**, never zero or low demand. Try another period if useful. `relatedTerms` are separate keywords with their own scores; never substitute one for the requested term.

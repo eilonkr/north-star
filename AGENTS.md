@@ -4,9 +4,10 @@ Private TypeScript package and CLI for Apple's App Store keyword inspection. The
 
 ## Layout
 
-- `lib/index.ts`: public server API (`inspect`, `inspectionInput`, `connection`, types).
+- `lib/index.ts`: public server API (`inspect`, `inspectionInput`, `connection`, `discoverCompetitorKeywords`, `competitorInput`, types).
 - `lib/browser.ts`: browser-safe API (markets, reporting periods, search recovery, types). Never transitively import authentication or Node modules here.
 - `lib/inspect.ts`: orchestrates search and popularity, with partial-failure handling.
+- `lib/competitors.ts`: bounded discovery and sequential verification; `competitor-metadata.ts`: fixed-host Apple lookup/subtitle retrieval; `keyword-candidates.ts`: deterministic English-oriented extraction and labelled feature combinations.
 - `lib/apple-ads.ts`, `lib/connection.ts`: Apple Ads JWT/OAuth, ACL check, Insights popularity, one-hour cache.
 - `lib/scoring.ts`: competition formula v0.1. `lib/store-search.ts`: validated public Apple search, 15-minute cache.
 - `lib/reporting.ts`, `lib/markets.ts`, `lib/types.ts`: periods, storefronts, contracts.
@@ -33,3 +34,4 @@ Treat API/CLI output as a contract. On shape changes, update CLI `summarize()`, 
 - Pass the PEM string directly to `sign()` in `lib/apple-ads.ts`; Cloudflare Workers do not support the alternative KeyObject path. Preserve the Worker test.
 - Apple Ads integration is read-only: OAuth exchange, ACL lookup, Insights query only. No campaign/spend endpoints.
 - Do not run live provider calls in automated tests. Use a few deliberate CLI checks when live verification is needed, respecting rate limits.
+- Competitor evidence is a public search sample, never a native store rank. Preserve `observed`, `not_observed`, `search_error`, and `not_checked` distinctions, source phrases, and timestamps. Stop verification on a search failure and retain prior results. Candidate ordering is a heuristic, not a demand score.
