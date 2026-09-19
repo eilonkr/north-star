@@ -1,0 +1,52 @@
+{
+  "name": "@eilonkr/north-star-core",
+  "version": "0.1.0",
+  "description": "Apple App Store keyword inspection API and CLI for North Star",
+  "private": true,
+  "type": "module",
+  "license": "UNLICENSED",
+  "engines": {
+    "node": ">=22.18.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/eilonkr/north-star-core.git"
+  },
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    },
+    "./browser": {
+      "types": "./dist/browser.d.ts",
+      "default": "./dist/browser.js"
+    }
+  },
+  "bin": {
+    "northstar": "scripts/inspect.mjs"
+  },
+  "files": [
+    "dist",
+    "scripts/inspect.mjs",
+    "skills",
+    "docs"
+  ],
+  "scripts": {
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
+    "test": "npm run build && node --test tests/*.test.mjs",
+    "prepack": "npm run build",
+    "prepare": "npm run build",
+    "inspect": "node scripts/inspect.mjs",
+    "setup:apple": "node scripts/setup-apple-ads.mjs"
+  },
+  "dependencies": {
+    "zod": "^3.25.76"
+  },
+  "devDependencies": {
+    "@types/node": "22.19.19",
+    "typescript": "5.9.3",
+    "esbuild": "0.28.0",
+    "miniflare": "4.20260515.0"
+  }
+}
