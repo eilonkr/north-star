@@ -1,6 +1,6 @@
-# North Star Core
+# North Star
 
-Private reusable API and CLI for App Store keyword inspection. Apple Ads supplies country-wide popularity when the exact term is reported; North Star computes an explicitly uncalibrated competition estimate from current public search results. The React website is a separate consumer.
+Private reusable API and CLI for App Store keyword inspection. Apple Ads supplies country-wide popularity when the exact term is reported; North Star computes an explicitly uncalibrated competition estimate from current public search results. The React website is a separate consumer. The GitHub repository is `eilonkr/north-star`; the package identifier remains `@eilonkr/north-star-core` for compatibility. Existing local checkouts may still be named `north-star-core`.
 
 ## Install and run
 
@@ -45,7 +45,7 @@ import type { Inspection } from '@eilonkr/north-star-core/browser';
 
 Validate external input with `inspectionInput` before calling `inspect`. All returned fields use the `Inspection` contract; provider failures are represented in that result. The host application owns HTTP routing, authentication, request limits, and secrets. There is no separately hosted API service.
 
-The website keeps a pinned `.tgz` release and source provenance so its private hosting build does not need a GitHub token. To release an update: bump `package.json` and the lockfile version, run checks, commit and push the core, then run the website's `npm run core:update -- /absolute/path/to/library-checkout`. Review and deploy the website's resulting dependency update separately. Never edit generated archives in place.
+The website keeps a pinned `.tgz` release and source provenance so its hosting build does not need a GitHub token. To release an update: bump `package.json` and the lockfile version, run checks, commit and push the core, then run the website's `npm run core:update -- /absolute/path/to/library-checkout`. Review and deploy the website's resulting dependency update separately. Never edit generated archives in place.
 
 ## Development and evidence
 
