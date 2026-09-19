@@ -10,7 +10,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/eilonkr/north-star-core.git"
+    "url": "git+https://github.com/eilonkr/north-star.git"
   },
   "exports": {
     ".": {

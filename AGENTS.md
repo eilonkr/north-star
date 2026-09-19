@@ -1,6 +1,6 @@
 # North Star Core
 
-Private TypeScript package and CLI for Apple's App Store keyword inspection. The website lives separately in `north-star`; this repository owns all inspection and scoring behavior. Operational CLI instructions live in [skills/northstar-keywords/SKILL.md](skills/northstar-keywords/SKILL.md), installable with the skills CLI. `CLAUDE.md` points here.
+Private TypeScript package and CLI for Apple's App Store keyword inspection. The website lives in a separate checkout; this repository owns all inspection and scoring behavior. Operational CLI instructions live in [skills/northstar-keywords/SKILL.md](skills/northstar-keywords/SKILL.md), installable with the skills CLI. `CLAUDE.md` points here.
 
 ## Layout
 

@@ -9,9 +9,9 @@ Use the local CLI for read-only keyword research. It calls Apple directly; no we
 
 ## Locate and set up the CLI
 
-First check `command -v northstar`. If it is unavailable, locate an existing `north-star-core` checkout and run `node /absolute/path/north-star-core/scripts/inspect.mjs`. Use absolute paths: agent shells may not load the user's aliases.
+First check `command -v northstar`. If it is unavailable, locate an existing library checkout (`north-star`, or the earlier local name `north-star-core`) and run `node /absolute/path/to/library-checkout/scripts/inspect.mjs`. Use absolute paths: agent shells may not load the user's aliases.
 
-If neither is available, authenticate Git access to the private `eilonkr/north-star-core` repo, clone it to an appropriate workspace, then run `npm ci` there (builds the CLI's library). Node 22.18+ is required. Optionally install the command with `npm install -g .` from that checkout. A GitHub login with repo access is required; never request passwords or tokens in chat.
+If neither is available, authenticate Git access to the private `eilonkr/north-star` repo, clone it to an appropriate workspace, then run `npm ci` there (builds the CLI's library). Node 22.18+ is required. Optionally install the command with `npm install -g .` from that checkout. A GitHub login with repo access is required; never request passwords or tokens in chat.
 
 For credentials, prefer an existing file with `--config /absolute/path/to/.env` or `NORTH_STAR_ENV_FILE`. Otherwise the CLI checks the checkout's `.env`, then `~/.config/north-star/.env`. Existing process environment variables take precedence over file values. No arbitrary working-directory `.env` is loaded. Without credentials, competition still works and popularity is `not_configured`.
 
