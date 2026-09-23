@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="240" viewBox="0 0 1200 240" role="img" aria-labelledby="title desc">
+<title id="title">North Star</title>
+<desc id="desc">An icy blue and teal pixel wordmark beside a bright North Star, with a subtle northern-lights glow across a midnight sky.</desc>
+<defs>
+  <linearGradient id="sky" x2="1" y2="1"><stop stop-color="#050e21"/><stop offset="0.55" stop-color="#091c2d"/><stop offset="1" stop-color="#080e23"/></linearGradient>
+  <linearGradient id="ice" x1="0" y1="0" x2="0.2" y2="1"><stop stop-color="#d4fbff"/><stop offset="0.38" stop-color="#8eeaf1"/><stop offset="0.7" stop-color="#58bde9"/><stop offset="1" stop-color="#6386f1"/></linearGradient>
+  <linearGradient id="starlight" x2="0" y2="1"><stop stop-color="#f6ffff"/><stop offset="0.5" stop-color="#beffff"/><stop offset="1" stop-color="#71c3ff"/></linearGradient>
+  <filter id="aurora" x="-30%" y="-100%" width="160%" height="300%"><feGaussianBlur stdDeviation="16"/></filter>
+  <filter id="halo" x="-80%" y="-80%" width="260%" height="260%"><feGaussianBlur stdDeviation="9"/></filter>
+  <path id="letters" d="M0 0h18v18h-18z M72 0h18v18h-18z M0 18h18v18h-18z M18 18h18v18h-18z M72 18h18v18h-18z M0 36h18v18h-18z M18 36h18v18h-18z M72 36h18v18h-18z M0 54h18v18h-18z M36 54h18v18h-18z M72 54h18v18h-18z M0 72h18v18h-18z M54 72h18v18h-18z M72 72h18v18h-18z M0 90h18v18h-18z M54 90h18v18h-18z M72 90h18v18h-18z M0 108h18v18h-18z M72 108h18v18h-18z M126 0h18v18h-18z M144 0h18v18h-18z M162 0h18v18h-18z M108 18h18v18h-18z M180 18h18v18h-18z M108 36h18v18h-18z M180 36h18v18h-18z M108 54h18v18h-18z M180 54h18v18h-18z M108 72h18v18h-18z M180 72h18v18h-18z M108 90h18v18h-18z M180 90h18v18h-18z M126 108h18v18h-18z M144 108h18v18h-18z M162 108h18v18h-18z M216 0h18v18h-18z M234 0h18v18h-18z M252 0h18v18h-18z M270 0h18v18h-18z M216 18h18v18h-18z M288 18h18v18h-18z M216 36h18v18h-18z M288 36h18v18h-18z M216 54h18v18h-18z M234 54h18v18h-18z M252 54h18v18h-18z M270 54h18v18h-18z M216 72h18v18h-18z M252 72h18v18h-18z M216 90h18v18h-18z M270 90h18v18h-18z M216 108h18v18h-18z M288 108h18v18h-18z M324 0h18v18h-18z M342 0h18v18h-18z M360 0h18v18h-18z M378 0h18v18h-18z M396 0h18v18h-18z M360 18h18v18h-18z M360 36h18v18h-18z M360 54h18v18h-18z M360 72h18v18h-18z M360 90h18v18h-18z M360 108h18v18h-18z M432 0h18v18h-18z M504 0h18v18h-18z M432 18h18v18h-18z M504 18h18v18h-18z M432 36h18v18h-18z M504 36h18v18h-18z M432 54h18v18h-18z M450 54h18v18h-18z M468 54h18v18h-18z M486 54h18v18h-18z M504 54h18v18h-18z M432 72h18v18h-18z M504 72h18v18h-18z M432 90h18v18h-18z M504 90h18v18h-18z M432 108h18v18h-18z M504 108h18v18h-18z M603 0h18v18h-18z M621 0h18v18h-18z M639 0h18v18h-18z M657 0h18v18h-18z M585 18h18v18h-18z M585 36h18v18h-18z M603 54h18v18h-18z M621 54h18v18h-18z M639 54h18v18h-18z M657 72h18v18h-18z M657 90h18v18h-18z M585 108h18v18h-18z M603 108h18v18h-18z M621 108h18v18h-18z M639 108h18v18h-18z M693 0h18v18h-18z M711 0h18v18h-18z M729 0h18v18h-18z M747 0h18v18h-18z M765 0h18v18h-18z M729 18h18v18h-18z M729 36h18v18h-18z M729 54h18v18h-18z M729 72h18v18h-18z M729 90h18v18h-18z M729 108h18v18h-18z M819 0h18v18h-18z M837 0h18v18h-18z M855 0h18v18h-18z M801 18h18v18h-18z M873 18h18v18h-18z M801 36h18v18h-18z M873 36h18v18h-18z M801 54h18v18h-18z M819 54h18v18h-18z M837 54h18v18h-18z M855 54h18v18h-18z M873 54h18v18h-18z M801 72h18v18h-18z M873 72h18v18h-18z M801 90h18v18h-18z M873 90h18v18h-18z M801 108h18v18h-18z M873 108h18v18h-18z M909 0h18v18h-18z M927 0h18v18h-18z M945 0h18v18h-18z M963 0h18v18h-18z M909 18h18v18h-18z M981 18h18v18h-18z M909 36h18v18h-18z M981 36h18v18h-18z M909 54h18v18h-18z M927 54h18v18h-18z M945 54h18v18h-18z M963 54h18v18h-18z M909 72h18v18h-18z M945 72h18v18h-18z M909 90h18v18h-18z M963 90h18v18h-18z M909 108h18v18h-18z M981 108h18v18h-18z"/>
+  <path id="star" d="M0 -42h7v7h-7z M0 -35h7v7h-7z M-7 -28h7v7h-7z M0 -28h7v7h-7z M7 -28h7v7h-7z M-21 -21h7v7h-7z M-7 -21h7v7h-7z M0 -21h7v7h-7z M7 -21h7v7h-7z M21 -21h7v7h-7z M-14 -14h7v7h-7z M-7 -14h7v7h-7z M0 -14h7v7h-7z M7 -14h7v7h-7z M14 -14h7v7h-7z M-21 -7h7v7h-7z M-14 -7h7v7h-7z M-7 -7h7v7h-7z M0 -7h7v7h-7z M7 -7h7v7h-7z M14 -7h7v7h-7z M21 -7h7v7h-7z M-35 0h7v7h-7z M-28 0h7v7h-7z M-21 0h7v7h-7z M-14 0h7v7h-7z M-7 0h7v7h-7z M0 0h7v7h-7z M7 0h7v7h-7z M14 0h7v7h-7z M21 0h7v7h-7z M28 0h7v7h-7z M35 0h7v7h-7z M-21 7h7v7h-7z M-14 7h7v7h-7z M-7 7h7v7h-7z M0 7h7v7h-7z M7 7h7v7h-7z M14 7h7v7h-7z M21 7h7v7h-7z M-14 14h7v7h-7z M-7 14h7v7h-7z M0 14h7v7h-7z M7 14h7v7h-7z M14 14h7v7h-7z M-21 21h7v7h-7z M-7 21h7v7h-7z M0 21h7v7h-7z M7 21h7v7h-7z M21 21h7v7h-7z M-7 28h7v7h-7z M0 28h7v7h-7z M7 28h7v7h-7z M0 35h7v7h-7z M0 42h7v7h-7z"/>
+  <pattern id="scanlines" width="4" height="4" patternUnits="userSpaceOnUse"><path d="M0 3.5H4" stroke="#142544" stroke-opacity="0.11"/></pattern>
+  <clipPath id="typeclip"><use href="#letters"/></clipPath>
+  <clipPath id="canvas"><rect width="1200" height="240" rx="8"/></clipPath>
+</defs>
+<g clip-path="url(#canvas)">
+  <rect width="1200" height="240" fill="url(#sky)"/>
+  <g fill="none" filter="url(#aurora)">
+    <path d="M-70 130 C170 -100 280 225 525 65 S890 -25 1270 118" stroke="#43e0b6" stroke-width="54" opacity="0.21"/>
+    <path d="M-30 208 C260 62 375 40 610 104 S1000 276 1250 15" stroke="#447fff" stroke-width="65" opacity="0.23"/>
+    <path d="M60 -20 C310 92 530 -74 885 40 S1050 175 1230 120" stroke="#5288c7" stroke-width="25" opacity="0.22"/>
+  </g>
+  <g fill="#a3eafa" opacity="0.6"><path d="M42 34h3v3h-3zM1138 199h4v4h-4zM1076 29h3v3h-3zM430 210h2v2h-2zM1153 66h2v2h-2zM182 201h2v2h-2z"/></g>
+  <g transform="translate(89,117)">
+    <use href="#star" fill="#4fe6f3" filter="url(#halo)" opacity="0.65"/>
+    <use href="#star" transform="translate(5,6)" fill="#254c7a"/>
+    <use href="#star" fill="url(#starlight)"/>
+  </g>
+  <g transform="translate(185,56) scale(0.9)">
+    <use href="#letters" transform="translate(18,18)" fill="#0b1634"/>
+    <use href="#letters" transform="translate(15,15)" fill="#143359"/>
+    <use href="#letters" transform="translate(11,11)" fill="#1c5681"/>
+    <use href="#letters" transform="translate(7,7)" fill="#2a7c9c"/>
+    <use href="#letters" fill="url(#ice)"/>
+    <rect width="1000" height="126" fill="url(#scanlines)" clip-path="url(#typeclip)"/>
+  </g>
+</g>
+</svg>
