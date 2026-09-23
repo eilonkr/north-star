@@ -1,6 +1,21 @@
 # North Star
 
+```text
+         .             |             .
+                   \   |   /
+             -------   *   -------
+                   /   |   \
+      *                |                  .
+
+             N O R T H   S T A R
+       Find your keywords. Chart your course.
+```
+
 An App Store keyword research CLI and TypeScript library. Check keywords by country and store, see competing apps, and compare search popularity with a transparent competition estimate.
+
+[![North Star CLI demo in Ghostty: inspecting AI video and mushroom identifier keywords](assets/north-star-ghostty-demo.gif)](assets/north-star-ghostty-demo.mp4)
+
+[Watch or download the 20-second Ghostty demo](assets/north-star-ghostty-demo.mp4?raw=true). Recorded CLI results with typing and waits shortened; popularity is Apple's reported index, and competition is a North Star estimate.
 
 - **Popularity:** Apple's relative 1–100 index, when the exact keyword is reported. Requires your own Apple Ads API credentials.
 - **Competition:** North Star's 1–100 estimate based on public app search results. Works without credentials.
