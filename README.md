@@ -1,59 +1,132 @@
 # North Star
 
-Private reusable API and CLI for App Store keyword inspection. Apple Ads supplies country-wide popularity when the exact term is reported; North Star computes an explicitly uncalibrated competition estimate from current public search results. The React website is a separate consumer. The GitHub repository is `eilonkr/north-star`; the package identifier remains `@eilonkr/north-star-core` for compatibility. Existing local checkouts may still be named `north-star-core`.
+An App Store keyword research CLI and TypeScript library. Check keywords by country and store, see competing apps, and compare search popularity with a transparent competition estimate.
 
-## Install and run
+- **Popularity:** Apple's relative 1–100 index, when the exact keyword is reported. Requires your own Apple Ads API credentials.
+- **Competition:** North Star's 1–100 estimate based on public app search results. Works without credentials.
+- **JSON output:** Full results or compact summaries for scripts and AI agents.
 
-Requires Node 22.18+ and GitHub access to this private repository.
+Supports iPhone, iPad, and Mac storefront searches. Apple Ads popularity is available for supported iPhone/iPad markets; Mac popularity is unsupported.
+
+## Quick start
+
+Requires **Node.js 22.18 or later** and npm.
 
 ```sh
-gh repo clone eilonkr/north-star
+git clone https://github.com/eilonkr/north-star.git
 cd north-star
 npm ci
-npm run --silent inspect -- "habit tracker" --summary
+npm run --silent inspect -- "habit tracker" --country US --summary
 ```
 
-For a command available from any directory, run `npm install -g .`, then `northstar "habit tracker" --summary`. The install contains compiled JavaScript and needs no website server.
+This works without an account: search results and competition are returned, while popularity is marked `not_configured`.
 
-Use `--config /path/to/.env` or `NORTH_STAR_ENV_FILE` for existing Apple Ads credentials. Otherwise the CLI loads the checkout's `.env`, then `~/.config/north-star/.env`. Existing environment variables take precedence. See [Apple Ads setup](docs/APPLE_ADS_SETUP.md); do not regenerate a registered key. Public search and competition work without credentials.
+To install the `northstar` command from the checkout:
 
-## Install the agent skill
+```sh
+npm install -g .
+northstar "habit tracker" --summary
+```
+
+Alternatively, run `node scripts/inspect.mjs` from the checkout. No website or server is required.
+
+## CLI usage
+
+```sh
+northstar "plant identifier" --country US --range month --summary
+northstar "habit tracker" "mood journal" --country GB --summary
+northstar "notes" --country DE --store mac
+northstar --countries
+northstar --connection
+northstar --help
+```
+
+Quote multi-word keywords. The command prints a JSON array, with one result per keyword in input order. Full results include up to 30 apps, popularity status and reporting period, and the competition score and its contributing factors. `--summary` keeps the scores, status, period, related reported terms, and first five apps.
+
+| Option | Description |
+| --- | --- |
+| `-c, --country` | Storefront country code; default `US`. Use `--countries` for supported codes. |
+| `-s, --store` | `iphone` (default), `ipad`, or `mac`. |
+| `-r, --range` | `week` (default), `previous_week`, `month`, or `previous_month`. |
+| `--summary` | Compact JSON output. |
+| `--config` | Path to an Apple Ads credential file. |
+| `--connection` | Check Apple Ads authentication and account access. |
+| `--countries` | List supported storefront codes. |
+| `-h, --help` | Show usage. |
+
+Usage errors exit with code 1. Keyword lookups can return partial results with error fields and exit 0, so scripts should inspect `popularity.status` and `searchError` (or `popularityStatus` in summary output). `--connection` exits 0 only when connected.
+
+## Enable popularity
+
+Follow the [Apple Ads setup guide](docs/APPLE_ADS_SETUP.md) to register your own API key. App Store Connect keys are not interchangeable with Apple Ads credentials.
+
+```sh
+northstar --config /path/to/credentials.env --connection
+northstar "habit tracker" --config /path/to/credentials.env --range month --summary
+```
+
+Credential-file selection: `--config`, then `NORTH_STAR_ENV_FILE`, then the checkout's `.env` if present, otherwise `~/.config/north-star/.env`. Existing environment variables take precedence over file values. Credentials remain local to the CLI or your server; never put them in browser code or commit them.
+
+## Understand the results
+
+**Missing popularity means unknown, not zero.** Apple's reporting dataset does not cover every keyword. `not_reported` means the exact term was absent for the selected country and period. Related terms have their own scores and are never substituted for the requested keyword. Popularity is a relative index, not monthly search volume.
+
+Reporting ranges select one published weekly or calendar-month bucket, not a rolling average. Competition always uses the current search sample regardless of the popularity period. Search samples can be cached for 15 minutes and popularity for an hour within the same process.
+
+**Competition is an uncalibrated estimate, not an Apple score or a probability of ranking.** It uses the first 10 apps in Apple's public Search API response, which is not guaranteed to match on-device App Store rankings:
+
+| Factor | Weight | Signal |
+| --- | --- | --- |
+| Rating volume | 55% | Log-scaled rating count, capped at one million. |
+| Title relevance | 30% | Exact phrase or query-token overlap. |
+| Rating strength | 10% | Star rating discounted for small rating counts. |
+| Update recency | 5% | Exponential decay with a 180-day time constant. |
+
+Positions are weighted by `1 / log2(position + 1)`, then the combined value is mapped to 1–100. Fewer than three results yields no score; confidence is never higher than `limited`. The complete calculation is in [lib/scoring.ts](lib/scoring.ts).
+
+Keep batches small. Apple [documents an approximate 20-request-per-minute limit](https://developer.apple.com/library/archive/documentation/AudioVideo/Conceptual/iTuneSearchAPI/Searching.html); sequential execution alone does not enforce it. North Star does not create campaigns, change bids, or spend money.
+
+## Use with AI agents
+
+Install the usage skill with the [skills CLI](https://github.com/vercel-labs/skills):
 
 ```sh
 npx skills add eilonkr/north-star --skill northstar-keywords
 ```
 
-This follows the [skills CLI format](https://github.com/vercel-labs/skills). Private-repo Git/GitHub authentication is required. Add `--global` to install across projects, and `--agent codex` or `--agent claude-code` to select agents. Skill installation provides instructions; install the CLI separately using the steps above. The full [CLI workflow and output interpretation](skills/northstar-keywords/SKILL.md) live in the skill, while [AGENTS.md](AGENTS.md) covers development.
+Add `--global` for a user-wide installation. The skill provides instructions; install the CLI separately as shown above.
 
-## Public library API
+## TypeScript API
 
-Install a versioned archive produced by `npm pack`, or install a pinned Git commit from the private repo. Git installs require GitHub access at install time and build via `prepare`; packed releases already contain JavaScript and declarations.
+The package is named `@eilonkr/north-star-core`. From a checkout, run `npm pack` to build an installable archive, then install that archive in your project with `npm install /path/to/archive.tgz`.
 
 ```ts
-// Server only: never import this entrypoint from browser components.
-import { inspect, inspectionInput, connection } from '@eilonkr/north-star-core';
-const input = inspectionInput.parse({
-  keyword: 'habit tracker', country: 'US', store: 'iphone', reportingRange: 'month',
-});
-const result = await inspect(serverEnvironment, input);
-const status = await connection(serverEnvironment);
+import { inspect, inspectionInput } from '@eilonkr/north-star-core';
 
-// Browser-safe helpers, including hosted-search recovery; no secrets or Node crypto.
-import { markets, reportingRanges, recoverSearch } from '@eilonkr/north-star-core/browser';
-import type { Inspection } from '@eilonkr/north-star-core/browser';
+const input = inspectionInput.parse({
+  keyword: 'habit tracker',
+  country: 'US',
+  store: 'iphone',
+  reportingRange: 'month',
+});
+
+const result = await inspect(process.env, input);
 ```
 
-Validate external input with `inspectionInput` before calling `inspect`. All returned fields use the `Inspection` contract; provider failures are represented in that result. The host application owns HTTP routing, authentication, request limits, and secrets. There is no separately hosted API service.
+The main entrypoint is server-only. Browser-safe market lists, reporting helpers, and search recovery are available from `@eilonkr/north-star-core/browser`. Applications own their HTTP endpoints and secret configuration.
 
-The website keeps a pinned `.tgz` release and source provenance so its hosting build does not need a GitHub token. To release an update: bump `package.json` and the lockfile version, run checks, commit and push the core, then run the website's `npm run core:update -- /absolute/path/to/library-checkout`. Review and deploy the website's resulting dependency update separately. Never edit generated archives in place.
-
-## Development and evidence
+## Development
 
 ```sh
+npm ci
 npm test
 npm run typecheck
 npm run build
 npm pack --dry-run
 ```
 
-Tests cover report boundaries and matching, scoring, partial failures, CLI behavior, browser isolation, and signing in the Cloudflare Worker runtime. [Research and limitations](docs/RESEARCH.md) explain why missing popularity is unknown and why competition is an estimate. iPhone/iPad share popularity; Mac does not have an Apple Ads popularity score.
+See [AGENTS.md](AGENTS.md) for the repository layout, conventions, and contribution checks. Tests use mocked provider responses and generated test keys; no Apple credentials are needed.
+
+## License
+
+[MIT](LICENSE).

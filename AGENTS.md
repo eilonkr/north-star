@@ -1,6 +1,6 @@
 # North Star
 
-Private TypeScript package and CLI for Apple's App Store keyword inspection. The website lives in a separate checkout; this repository owns all inspection and scoring behavior. Operational CLI instructions live in [skills/northstar-keywords/SKILL.md](skills/northstar-keywords/SKILL.md), installable with the skills CLI. `CLAUDE.md` points here.
+TypeScript library and CLI for Apple App Store keyword research. This repository owns the inspection API, scoring, authentication, and command-line interface. Operational CLI instructions live in [skills/northstar-keywords/SKILL.md](skills/northstar-keywords/SKILL.md), installable with the skills CLI. `CLAUDE.md` points here.
 
 ## Layout
 
@@ -12,16 +12,16 @@ Private TypeScript package and CLI for Apple's App Store keyword inspection. The
 - `lib/reporting.ts`, `lib/markets.ts`, `lib/types.ts`: periods, storefronts, contracts.
 - `scripts/inspect.mjs`: CLI adapter over the compiled public API; JSON summarization and credential-file loading.
 - `tests/`: domain, API/CLI, browser graph, and Cloudflare Worker authentication tests.
-- `docs/`: source research/formula and Apple credential setup. `skills/`: agent usage instructions.
+- `docs/`: Apple credential setup. `skills/`: agent usage instructions.
 - `dist/`: generated JavaScript and declarations, ignored by Git and included in package archives.
 
 ## Development
 
-Node 22.18+; run `npm ci`, then `npm test`, `npm run typecheck`, and `npm run build` before calling a change done. CI runs these checks without owner credentials. `npm pack` builds an installable archive. The website consumes an exact packed version; its update script records the clean source commit and archive hash. Do not edit website copies to change the core.
+Node 22.18+; run `npm ci`, then `npm test`, `npm run typecheck`, and `npm run build` before calling a change done. CI runs these checks without owner credentials. `npm pack` builds an installable archive. Consumers use versioned packages. Keep changes within this repository; updating or deploying an external consumer is a separate task.
 
 Use relative `.ts` extensions for all internal imports. TypeScript rewrites them to `.js` in distribution; do not ship TypeScript sources as executable code under `node_modules`. Avoid enums and parameter properties so source tests remain compatible with Node's type stripping. Keep public APIs in the two entrypoints; no consumer imports of private files.
 
-Treat API/CLI output as a contract. On shape changes, update CLI `summarize()`, skill guidance, consumer integration tests, and the package version. Bump the package version for each release; preserve the competition version unless the formula actually changes. Formula changes require a new label and `docs/RESEARCH.md` update.
+Treat API/CLI output as a contract. On shape changes, update CLI `summarize()`, skill guidance, consumer integration tests, and the package version. Bump the package version for each release; preserve the competition version unless the formula actually changes. Formula changes require a new label and README scoring documentation update.
 
 ## Invariants
 

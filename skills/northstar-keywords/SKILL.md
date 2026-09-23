@@ -9,9 +9,9 @@ Use the local CLI for read-only keyword research. It calls Apple directly; no we
 
 ## Locate and set up the CLI
 
-First check `command -v northstar`. If it is unavailable, locate an existing library checkout (`north-star`, or the earlier local name `north-star-core`) and run `node /absolute/path/to/library-checkout/scripts/inspect.mjs`. Use absolute paths: agent shells may not load the user's aliases.
+First check `command -v northstar`. If it is unavailable, locate an existing North Star checkout and run `node /absolute/path/to/library-checkout/scripts/inspect.mjs`. Use absolute paths: agent shells may not load the user's aliases.
 
-If neither is available, authenticate Git access to the private `eilonkr/north-star` repo, clone it to an appropriate workspace, then run `npm ci` there (builds the CLI's library). Node 22.18+ is required. Optionally install the command with `npm install -g .` from that checkout. A GitHub login with repo access is required; never request passwords or tokens in chat.
+If neither is available, clone `https://github.com/eilonkr/north-star.git` to an appropriate workspace and run `npm ci` there (builds the CLI's library). Node 22.18+ is required. Optionally install the command with `npm install -g .` from that checkout.
 
 For credentials, prefer an existing file with `--config /absolute/path/to/.env` or `NORTH_STAR_ENV_FILE`. Otherwise the CLI checks the checkout's `.env`, then `~/.config/north-star/.env`. Existing process environment variables take precedence over file values. No arbitrary working-directory `.env` is loaded. Without credentials, competition still works and popularity is `not_configured`.
 
@@ -46,7 +46,7 @@ Keyword output is a JSON array, one result per keyword in input order. Summary f
 - `not_reported`: Apple omitted this exact term from the country's eligible top-terms report for the selected period. Popularity is **unknown**, never zero or low demand. Try another period if useful. `relatedTerms` are separate keywords with their own scores; never substitute one for the requested term.
 - `unsupported`: Mac has no popularity data; competition can still work.
 - `not_configured` / `error`: inspect `popularityMessage` and, when appropriate, `--connection`. Connection success proves token/account access, not Insights access or keyword coverage.
-- Competition is North Star's uncalibrated 1–100 estimate, never an official Apple score or interchangeable with Appfigures/Astro. Confidence is at most `limited`; fewer than three results yield `null`. See `docs/RESEARCH.md` in the checkout for the formula.
+- Competition is North Star's uncalibrated 1–100 estimate, never an official Apple score or interchangeable with Appfigures/Astro. Confidence is at most `limited`; fewer than three results yield `null`. See the README scoring section and `lib/scoring.ts` for the formula.
 - `searchError`: public App Store search failed; empty apps and null competition are unavailable evidence, not an easy keyword.
 
 Report the exact keyword, country, store, returned period, scores, and material limitations. Avoid implying absent data proves weak demand. Use small, deliberate batches; keywords execute sequentially but that alone does not enforce Apple's roughly 20-searches/minute limit. Do not bulk-crawl. If rate-limited, stop repeated retries and wait before a small retry. The integration is read-only: never create campaigns, bids, or spend to obtain data.

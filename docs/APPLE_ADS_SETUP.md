@@ -1,61 +1,58 @@
-# Connect Apple Ads to North Star
+# Apple Ads setup
 
-North Star uses the official Apple Ads **Platform API v1**. App Store Connect API keys and ordinary App Store sign-in are not substitutes. No password, session cookies, campaign creation, or advertising spend is requested by this app.
+Popularity requires your own Apple Ads Platform API credentials. App Store Connect keys and an ordinary App Store login are not substitutes. Public app search and competition work without credentials.
 
-## 1. Prepare a key pair
+## 1. Create or reuse a key
 
-Run `npm run setup:apple` once. This generates an EC P-256 key pair locally, with a restricted-permission private key in `.secrets/apple-ads-private.pem`, a public key in `.secrets/apple-ads-public.pem`, and an ignored `.env` file containing the private key plus empty IDs. The script refuses to overwrite an existing `.env` or private key. `.secrets/`, `.env`, and PEM files are excluded from Git. Never send the private key in chat or commit it.
+If you already have credentials, point the CLI at their file with `--config /path/to/credentials.env`. Reuse the registered key.
 
-If you already have North Star credentials, point the CLI at that existing file with `--config` or `NORTH_STAR_ENV_FILE`. Reuse the registered key; do not generate another unless rotating intentionally.
+For a new setup, run this from the repository checkout:
 
-## 2. Enable API access in Apple Ads
+```sh
+npm run setup:apple
+```
 
-An Apple Ads account administrator opens **Account Settings → User Management** and invites a dedicated API user. Use the least-privileged read-only API role that can access your App Store ad account and Insights. The user accepts Apple's invitation themselves.
+This generates an EC P-256 key pair in `.secrets/` and an ignored `.env` file. The private key and `.env` have restricted file permissions. The script refuses to overwrite an existing private key or `.env`.
 
-Signed in as the API user, open **Account Settings → API**. Paste the entire public key from `.secrets/apple-ads-public.pem`, including the BEGIN and END lines, and save. Apple shows a **clientId**, **teamId**, and **keyId**. These are Apple Ads IDs, not the similarly named App Store Connect credentials.
+Register only `.secrets/apple-ads-public.pem` with Apple. Keep `.secrets/apple-ads-private.pem` and `.env` private. Never commit them or paste their contents into an issue.
 
-## 3. Set the server environment
+## 2. Register the public key
 
-Fill the existing ignored `.env` values:
+Follow Apple's [API access guide](https://developer.apple.com/documentation/apple-ads-platform-api/access-overview) and [OAuth setup instructions](https://developer.apple.com/documentation/apple-ads-platform-api/implementing-oauth-for-the-apple-ads-platform-api). An account administrator must grant an API user access to the relevant ad account. Use the least-privileged role that permits the read-only account and Insights requests.
 
-| Variable                  | Value                                                                                  |
-| ------------------------- | -------------------------------------------------------------------------------------- |
-| `APPLE_ADS_CLIENT_ID`     | Apple's clientId, typically prefixed SEARCHADS.                                        |
-| `APPLE_ADS_TEAM_ID`       | Apple's teamId, typically prefixed SEARCHADS.                                          |
-| `APPLE_ADS_KEY_ID`        | Apple's keyId                                                                          |
-| `APPLE_ADS_AD_ACCOUNT_ID` | The Platform API ad account ID, **not** the legacy organization ID                     |
-| `APPLE_ADS_PRIVATE_KEY`   | Already populated by the local setup script; supports literal newlines or escaped `\n` |
+As the API user, register the complete public key in Apple Ads' API settings. Save the returned client ID, team ID, and key ID in the generated `.env` file.
 
-For a hosted North Star site, configure these same names using the hosting provider's **server secret** environment settings. Do not use NEXT_PUBLIC/VITE_PUBLIC variables. Local `.env` values are never bundled or pushed to the hosted site. Hosted setup is a separate step.
+## 3. Configure credentials
 
-If the ad account ID is unknown, `GET https://api.ads.apple.com/v1/acls` with an Apple Ads OAuth access token lists accessible accounts under `result.acls[].adAccount.id`. North Star's connection check verifies the configured account appears there. An account administrator may need to enable API access or associate the API user with the correct account.
+| Variable | Value |
+| --- | --- |
+| `APPLE_ADS_CLIENT_ID` | Apple Ads client ID. |
+| `APPLE_ADS_TEAM_ID` | Apple Ads team ID. |
+| `APPLE_ADS_KEY_ID` | ID of the registered public key. |
+| `APPLE_ADS_AD_ACCOUNT_ID` | Platform API ad account ID, not the legacy organization ID. |
+| `APPLE_ADS_PRIVATE_KEY` | PEM private key; populated by the setup script. Literal newlines and escaped `\n` are supported. |
 
-The CLI reads credentials when it starts. Restart a consuming local website after editing its `.env`; redeploy after configuring hosted runtime secrets as required by hosting. Open **Apple Ads connection → Check connection**, then inspect a keyword. The connection check proves token exchange and account access; only a successful keyword lookup proves Insights endpoint access.
+If you do not know the ad account ID, the Platform API's authenticated `GET https://api.ads.apple.com/v1/acls` response lists accessible accounts under `result.acls[].adAccount.id`. The connection check verifies access to the configured account.
 
-## How authentication works
+The CLI selects a file using `--config`, then `NORTH_STAR_ENV_FILE`, then its checkout's `.env`, otherwise `~/.config/north-star/.env`. It does not load an arbitrary working-directory `.env`. Existing environment variables take precedence.
 
-North Star signs an ES256 JWT with the private key, using `iss=teamId`, `sub=clientId`, and `aud=https://appleid.apple.com`. It exchanges this short-lived client assertion at `https://appleid.apple.com/auth/oauth2/token` with `grant_type=client_credentials` and `scope=searchadsorg`. The bearer token remains on the server and expires in about an hour. Insights requests include `X-AP-Context: adAccountId=<id>`.
+When embedding the library in a server, pass these values through the server environment. Never expose them in client components or public environment variables.
 
-Only token exchange, read-only ACL discovery, and an Insights query are implemented. There are no campaign mutation endpoints.
+## 4. Verify access
 
-## Coverage limits
+```sh
+node scripts/inspect.mjs --connection
+node scripts/inspect.mjs "habit tracker" --country US --range month --summary
+```
 
-Apple reports up to 500 qualifying search terms per country/genre; terms need at least 500 searches and 10 impressions in the reporting period. Country-wide popularity is a relative 1–100 index, not raw searches. iPhone/iPad share the signal. Mac is unsupported. Missing terms are displayed as **not reported**, never zero.
+For a credential file outside the checkout, add `--config /path/to/credentials.env` to either command. The CLI reads credentials at startup.
 
-The latest weekly snapshot is published Mondays at 07:00 UTC for the prior Sunday–Saturday. Live responses identify the `week` by its starting Sunday (verified against the Platform API on 2026-09-17). North Star observes that boundary and requests the latest published period. Country selection does not guarantee Apple publishes popularity for that country.
+A successful connection proves token exchange and account access. A keyword request separately exercises Insights permissions. `not_reported` is a valid response: it means Apple omitted the exact keyword from that country/period's dataset, not that authentication failed or demand is zero.
 
-The popularity-period selector supports the latest two published weeks and calendar months. Monthly snapshots publish on the 5th of the following month UTC and return `month` as YYYY-MM. Before the 5th, the latest published month is two calendar months ago. Each request selects exactly one bucket; scores are never averaged across weeks or months. Cache keys include both dates and granularity. Competition remains a current search snapshot. A monthly period may improve coverage but does not guarantee the exact keyword is reported.
+## Authentication and reporting
 
-## Verification status
+North Star signs an ES256 client assertion and exchanges it for an OAuth access token. Requests use `X-AP-Context: adAccountId=<id>`. The token stays in the CLI/server process. Only OAuth, read-only account access, and popularity Insights requests are used; no campaign mutations or spending are implemented.
 
-OAuth token exchange, account discovery, and the Insights endpoint were verified live on 2026-09-17 using the registered key. Live responses also revealed that the weekly bucket uses its starting Sunday; the parser and regression test now follow the observed response. Hosted credentials are stored separately as server secrets.
+Weekly periods cover Sunday–Saturday and become eligible Monday at 07:00 UTC. Monthly periods become eligible on the fifth of the following month UTC. North Star selects the latest or previous published period and never averages scores across periods. Apple may omit a keyword or market; switching periods does not guarantee coverage. Mac popularity is unsupported.
 
-## Official sources
-
-- [OAuth setup](https://developer.apple.com/documentation/apple-ads-platform-api/implementing-oauth-for-the-apple-ads-platform-api)
-- [Ad accounts and API access](https://developer.apple.com/documentation/apple-ads-platform-api/access-overview)
-- [Search-term popularity query](https://developer.apple.com/documentation/apple-ads-platform-api/query-app-search-term-popularity-data)
-- [Popularity fields and coverage](https://developer.apple.com/documentation/apple-ads-platform-api/searchtermpopularityrow)
-- [Reporting schedule](https://developer.apple.com/documentation/apple-ads-platform-api/searchtermpopularitytimerange)
-
-Researched 2026-09-17 against Apple's documentation JSON as well as its documentation pages.
+Apple references: [search-term popularity](https://developer.apple.com/documentation/apple-ads-platform-api/query-app-search-term-popularity-data), [popularity fields](https://developer.apple.com/documentation/apple-ads-platform-api/searchtermpopularityrow), and [reporting periods](https://developer.apple.com/documentation/apple-ads-platform-api/searchtermpopularitytimerange).
