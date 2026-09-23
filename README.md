@@ -8,8 +8,6 @@ An App Store keyword research CLI and TypeScript library. Check keywords by coun
 
 [![North Star CLI demo in Ghostty: inspecting AI video and mushroom identifier keywords](assets/north-star-ghostty-demo.gif)](assets/north-star-ghostty-demo.mp4)
 
-[Watch or download the 20-second Ghostty demo](assets/north-star-ghostty-demo.mp4?raw=true): a simple `--summary` lookup, then a monthly query, with scores and the first three apps from each search sample. A condensed replay of real CLI output, with shortened typing and waits; popularity is Apple's reported index, and competition is a North Star estimate.
-
 - **Popularity:** Apple's relative 1–100 index, when the exact keyword is reported. Requires your own Apple Ads API credentials.
 - **Competition:** North Star's 1–100 estimate based on public app search results. Works without credentials.
 - **JSON output:** Full results or compact summaries for scripts and AI agents.
