@@ -6,7 +6,7 @@ Popularity requires your own Apple Ads Platform API credentials. App Store Conne
 
 If you already have credentials, point the CLI at their file with `--config /path/to/credentials.env`. Reuse the registered key.
 
-For a new setup, run this from the repository checkout:
+For a new setup, use a North Star repository checkout with dependencies installed as described in [the skill's CLI setup instructions](../SKILL.md#locate-and-set-up-the-cli). The installed skill contains this guide, not the CLI or key-generation script. Run this from the checkout root:
 
 ```sh
 npm run setup:apple
@@ -39,6 +39,8 @@ The CLI selects a file using `--config`, then `NORTH_STAR_ENV_FILE`, then its ch
 When embedding the library in a server, pass these values through the server environment. Never expose them in client components or public environment variables.
 
 ## 4. Verify access
+
+Run these commands from the same checkout root:
 
 ```sh
 node scripts/inspect.mjs --connection

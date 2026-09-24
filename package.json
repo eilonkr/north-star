@@ -27,8 +27,7 @@
   "files": [
     "dist",
     "scripts/inspect.mjs",
-    "skills",
-    "docs"
+    "skills"
   ],
   "scripts": {
     "build": "tsc",

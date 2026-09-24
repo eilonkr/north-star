@@ -12,7 +12,7 @@ TypeScript library and CLI for Apple App Store keyword research. This repository
 - `lib/reporting.ts`, `lib/markets.ts`, `lib/types.ts`: periods, storefronts, contracts.
 - `scripts/inspect.mjs`: CLI adapter over the compiled public API; JSON summarization and credential-file loading.
 - `tests/`: domain, API/CLI, browser graph, and Cloudflare Worker authentication tests.
-- `docs/`: Apple credential setup. `skills/`: agent usage instructions.
+- `skills/northstar-keywords/`: agent usage instructions; `references/` contains the bundled Apple credential setup guide.
 - `dist/`: generated JavaScript and declarations, ignored by Git and included in package archives.
 
 ## Development

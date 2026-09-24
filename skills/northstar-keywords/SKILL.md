@@ -15,7 +15,7 @@ If neither is available, clone `https://github.com/eilonkr/north-star.git` to an
 
 For credentials, prefer an existing file with `--config /absolute/path/to/.env` or `NORTH_STAR_ENV_FILE`. Otherwise the CLI checks the checkout's `.env`, then `~/.config/north-star/.env`. Existing process environment variables take precedence over file values. No arbitrary working-directory `.env` is loaded. Without credentials, competition still works and popularity is `not_configured`.
 
-If credentials need configuring, ask for the existing file's path only. Follow `docs/APPLE_ADS_SETUP.md` in the checkout for a genuinely new setup. Never regenerate an existing key. Keep Apple credentials out of source control, command arguments, logs, and browser code.
+If credentials need configuring, ask for the existing file's path only. For a genuinely new setup, read the bundled [Apple Ads setup guide](references/APPLE_ADS_SETUP.md). Never regenerate an existing key. Keep Apple credentials out of source control, command arguments, logs, and browser code.
 
 ## Run an inspection
 

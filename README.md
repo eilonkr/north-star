@@ -64,7 +64,7 @@ Usage errors exit with code 1. Keyword lookups can return partial results with e
 
 ## Enable popularity
 
-Follow the [Apple Ads setup guide](docs/APPLE_ADS_SETUP.md) to register your own API key. App Store Connect keys are not interchangeable with Apple Ads credentials.
+Follow the [Apple Ads setup guide](skills/northstar-keywords/references/APPLE_ADS_SETUP.md) to register your own API key. App Store Connect keys are not interchangeable with Apple Ads credentials.
 
 ```sh
 northstar --config /path/to/credentials.env --connection
